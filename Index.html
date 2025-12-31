@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome 2026! ✨</title>
+    <style>
+        /* --- CSS STYLES --- */
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;700&family=Sacramento&display=swap');
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #020205; /* Deep space black */
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        /* Centered Text Container */
+        #container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            pointer-events: none; /* Allows clicking through text to canvas */
+            z-index: 10;
+            width: 90%;
+        }
+
+        /* The Typing Text */
+        #greeting {
+            color: #fff;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            min-height: 30px;
+        }
+
+        /* The Big Year Number */
+        #year {
+            font-size: 6rem;
+            font-weight: 700;
+            color: transparent;
+            background-image: linear-gradient(45deg, #ff0055, #ff9900, #ffff00, #00ff00, #00ffff, #0055ff, #ff00ff);
+            background-size: 400%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: glow 20s linear infinite;
+            opacity: 0; /* Hidden initially */
+            transform: scale(0.5);
+            transition: all 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* The Script Wish */
+        #message {
+            font-family: 'Sacramento', cursive;
+            color: #fff;
+            font-size: 2.5rem;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1.5s ease;
+        }
+
+        /* Footer Instruction */
+        #hint {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.8rem;
+            animation: pulse 2s infinite;
+            pointer-events: none;
+        }
+
+        /* Animations */
+        @keyframes glow {
+            0% { background-position: 0%; }
+            100% { background-position: 400%; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 600px) {
+            #year { font-size: 4rem; }
+            #message { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="container">
+        <div id="greeting"></div>
+        <div id="year">2026</div>
+        <div id="message">May this year bring you<br>Infinite Possibilities.</div>
+    </div>
+
+    <div id="hint">Tap anywhere to celebrate</div>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        /* --- JAVASCRIPT LOGIC --- */
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+        
+        // Resize canvas
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Colors for fireworks
+        const colors = ['#FF1461', '#18FF92', '#5A87FF', '#FBF38C', '#ff00de'];
+
+        // Particle Class
+        class Particle {
+            constructor(x, y, type) {
+                this.x = x;
+                this.y = y;
+                this.type = type; // 'firework' or 'trail'
+                
+                if (type === 'firework') {
+                    const angle = Math.random() * Math.PI * 2;
+                    const velocity = Math.random() * 4 + 2;
+                    this.vx = Math.cos(angle) * velocity;
+                    this.vy = Math.sin(angle) * velocity;
+                    this.life = 100;
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                    this.size = Math.random() * 3 + 1;
+                    this.gravity = 0.05;
+                } else {
+                    // Mouse trail
+                    this.vx = (Math.random() - 0.5) * 1;
+                    this.vy = (Math.random() - 0.5) * 1;
+                    this.life = 40;
+                    this.color = 'rgba(255, 255, 255, 0.5)';
+                    this.size = Math.random() * 2;
+                    this.gravity = 0;
+                }
+                this.alpha = 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life--;
+                
+                if (this.type === 'firework') {
+                    this.vy += this.gravity;
+                    this.alpha = this.life / 100;
+                    this.size *= 0.96;
+                } else {
+                    this.alpha = this.life / 40;
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Create Explosion
+        function createExplosion(x, y) {
+            for (let i = 0; i < 40; i++) {
+                particles.push(new Particle(x, y, 'firework'));
+            }
+        }
+
+        // Animation Loop
+        function animate() {
+            // Leave a slight trail behind for motion blur effect
+            ctx.fillStyle = 'rgba(2, 2, 5, 0.2)';
+            ctx.fillRect(0, 0, width, height);
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                
+                if (particles[i].life <= 0) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Interactions
+        canvas.addEventListener('click', (e) => {
+            createExplosion(e.clientX, e.clientY);
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            // Add trail particles
+            for(let i=0; i<2; i++) {
+                particles.push(new Particle(e.clientX, e.clientY, 'trail'));
+            }
+        });
+
+        // Touch support for mobile
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            createExplosion(e.touches[0].clientX, e.touches[0].clientY);
+        });
+
+        // Auto fireworks for background ambiance
+        setInterval(() => {
+            const x = Math.random() * width;
+            const y = Math.random() * (height / 2); // Keep them high up
+            createExplosion(x, y);
+        }, 1500);
+
+
+        /* --- TEXT ANIMATION SEQUENCE --- */
+        const greetingText = "Goodbye 2025... Hello...";
+        const greetingElement = document.getElementById('greeting');
+        const yearElement = document.getElementById('year');
+        const messageElement = document.getElementById('message');
+
+        let charIndex = 0;
+
+        function typeWriter() {
+            if (charIndex < greetingText.length) {
+                greetingElement.innerHTML += greetingText.charAt(charIndex);
+                charIndex++;
+                setTimeout(typeWriter, 100);
+            } else {
+                // After typing finishes, reveal the big 2026
+                setTimeout(() => {
+                    yearElement.style.opacity = '1';
+                    yearElement.style.transform = 'scale(1)';
+                    
+                    // Then reveal the message
+                    setTimeout(() => {
+                        messageElement.style.opacity = '1';
+                        messageElement.style.transform = 'translateY(0)';
+                        
+                        // Big celebration explosion in center
+                        createExplosion(width/2, height/2);
+                    }, 1000);
+                }, 500);
+            }
+        }
+
+        // Start animation after a short delay
+        window.onload = () => {
+            setTimeout(typeWriter, 1000);
+        };
+    </script>
+</body>
+</html>
