@@ -16,9 +16,12 @@
         }
 
         body {
-            /* background-color: var(--bg-color); */
             background-image: url('bg.jpg');
+            background-color: var(--bg-color);
             background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             color: var(--terminal-green);
             font-family: 'JetBrains Mono', monospace;
             display: flex;
@@ -161,13 +164,35 @@
         
         // CSE + Indian Meme Logs
         const logs = [
-            { text: "> Error: 'Mithai' not found in directory.", type: "log-error" },
-            { text: "> Warning: 'Rishta' requests blocking port 8080.", type: "log-warning" },
-            { text: "> Optimizing Bank Balance... FAILED (Insufficient Funds).", type: "log-error" },
-            { text: "> Removing 'Toxic Ex'... Access Denied.", type: "log-error" },
-            { text: "> Installing 'Gym Motivation'... Estimated time: 3 days.", type: "log-warning" },
-            { text: "> Compiling 'Success'... 99% stuck.", type: "log-warning" },
-            { text: "> Linking Aadhaar to New Year resolution...", type: "log-entry" }
+            // CSE / Tech Jokes
+            { text: "> Deleting 'System32' to fix life issues... Error.", type: "log-error" },
+            { text: "> Copying 'Topper's Assignment'... Ctrl+C failed.", type: "log-warning" },
+            { text: "> GitHub Streak: 0 contributions in 365 days.", type: "log-error" },
+            { text: "> Deploying 'New Year Resolution'... Crashing in 3..2..", type: "log-warning" },
+            
+            // Indian / Desi Life
+            { text: "> Mom is typing... 'Phone utha nalayak'.", type: "log-error" },
+            { text: "> Searching for 'Acche Din'... 404 Not Found.", type: "log-warning" },
+            { text: "> UPI Transaction Pending... Server died.", type: "log-error" },
+            { text: "> Relatives detected. Activating 'Padhai' mode.", type: "log-success" },
+            
+            // Bengaluru / City Life
+            { text: "> Checking Silk Board Traffic... Estimated Delay: 2 Years.", type: "log-warning" },
+            { text: "> Order delivered: Biryani (Mood restored).", type: "log-success" },
+            
+            // Cricket / Pop Culture
+            { text: "> Calculating RCB winning probability... Calculator broken.", type: "log-error" },
+            { text: "> Thala for a reason check... 2+0+2+6 = 10 (Not 7). Panic!", type: "log-error" },
+            
+            // Additional memes
+            { text: "> Detecting ChatGPT in your assignment... 99% Match.", type: "log-error" },
+            { text: "> Contacting Auto Driver... Rejected (Won't go to Indiranagar).", type: "log-warning" },
+            { text: "> Downloading 'Sleep'... Failed. Insomnia_v4.0 installed.", type: "log-error" },
+            { text: "> Jay Shah writing script for 2026 World Cup...", type: "log-entry" },
+            { text: "> Scanning for 'Girlfriend'... Output: NULL pointer exception.", type: "log-error" },
+            { text: "> External Viva Examiner detected... Heart rate increased to 120bpm.", type: "log-warning" },
+            { text: "> Verifying 'Proxy Attendance'... Teacher is looking.", type: "log-warning" },
+            { text: "> Money Heist? No, just your college fees.", type: "log-entry" }
         ];
 
         // Funny Predictions for the final reveal
@@ -188,7 +213,31 @@
             "Prediction: You'll remember your WiFi password without looking.",
             "Prediction: Your code review comments will be 'LGTM' on first try.",
             "Prediction: You'll attend a hackathon and NOT just go for free food.",
-            "Prediction: Your 'Hello World' in Rust will compile without errors."
+            "Prediction: Your 'Hello World' in Rust will compile without errors.",
+            // New predictions
+            "Prediction: You will have 75% attendance... in your dreams.",
+            "Prediction: Your LinkedIn post 'Thrilled to announce' is loading...",
+            "Prediction: You will finally center a <div> (Lies).",
+            "Prediction: Relatives will ask 'Beta, package kitna laga?' at least 50 times.",
+            "Prediction: You will say 'Kal se pakka padhunga' 365 times.",
+            "Prediction: Better luck next time. (Google Pay Scratch Card Vibe).",
+            "Prediction: Your code will work on localhost, but crash in production.",
+            "Prediction: Relationship Status: 404 Not Found.",
+            // The "Roast" Predictions
+            "Prediction: You will mark 'Gym' as 'wont-fix' in Jira by Jan 15th.",
+            "Prediction: Your code will compile, but your logic will fail.",
+            "Prediction: You will say 'Bhai bas 5 min me pahunch raha hu' while in bed.",
+            "Prediction: Rejection from crush is handled. Exception caught.",
+            "Prediction: Goa Plan Status: 'Discussion Phase' (Infinite Loop).",
+            // The "Hopeful" Predictions
+            "Prediction: Placement Package > Sharma ji ka beta.",
+            "Prediction: Mess food will actually taste good one day.",
+            "Prediction: 2026 is the year you finally understand Dynamic Programming.",
+            "Prediction: You will find money in an old jeans pocket (Wealth += 500).",
+            // Meme Predictions
+            "Prediction: Ee Sala Cup Namde! (Maybe).",
+            "Prediction: Aishwaryaaaa... (iykyk).",
+            "Prediction: Moye Moye moments will reduce by 10%."
         ];
 
         let clickCount = 0;
