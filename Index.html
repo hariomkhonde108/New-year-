@@ -17,6 +17,8 @@
 
         body {
             background-color: var(--bg-color);
+            /* If you have the background image we discussed, uncomment the line below */
+            /* background-image: url('bg.jpg'); background-size: cover; */
             color: var(--terminal-green);
             font-family: 'JetBrains Mono', monospace;
             display: flex;
@@ -44,7 +46,7 @@
             width: 90%;
             max-width: 600px;
             height: 300px;
-            background: rgba(20, 20, 20, 0.9);
+            background: rgba(20, 20, 20, 0.95);
             border: 2px solid var(--terminal-green);
             box-shadow: 0 0 15px var(--terminal-green);
             padding: 20px;
@@ -52,9 +54,15 @@
             text-align: left;
             margin-bottom: 20px;
             font-size: 0.9rem;
+            border-radius: 8px;
         }
 
-        .log-entry { margin: 5px 0; }
+        /* Custom Scrollbar for the console */
+        .console-box::-webkit-scrollbar { width: 8px; }
+        .console-box::-webkit-scrollbar-thumb { background: var(--terminal-green); border-radius: 4px; }
+        .console-box::-webkit-scrollbar-track { background: #000; }
+
+        .log-entry { margin: 8px 0; border-bottom: 1px solid rgba(0,255,65,0.1); padding-bottom: 2px; }
         .log-warning { color: var(--chai-gold); }
         .log-error { color: var(--error-red); font-weight: bold; }
         .log-success { color: #00ffff; }
@@ -72,6 +80,7 @@
             transition: transform 0.1s;
             text-transform: uppercase;
             font-weight: bold;
+            z-index: 20;
         }
 
         #action-btn:active {
@@ -86,22 +95,26 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 90%;
+            width: 85%;
             max-width: 400px;
-            background: linear-gradient(135deg, #ff00cc, #333399);
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ff00cc;
             padding: 30px;
             border-radius: 15px;
             color: white;
-            box-shadow: 0 0 50px rgba(255, 0, 204, 0.5);
+            box-shadow: 0 0 50px rgba(255, 0, 204, 0.6);
             z-index: 100;
             animation: popIn 0.5s ease;
+            text-align: center;
         }
 
         #prophecy-text {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: bold;
             margin: 20px 0;
+            color: #ffcc00;
             text-shadow: 2px 2px 0 #000;
+            line-height: 1.4;
         }
 
         /* Confetti Canvas */
@@ -127,6 +140,11 @@
             80% { transform: translate(-50%, -50%) scale(1.1); }
             100% { transform: translate(-50%, -50%) scale(1); }
         }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.5rem; }
+            .console-box { font-size: 0.8rem; height: 250px; }
+        }
     </style>
 </head>
 <body>
@@ -137,15 +155,16 @@
     <div class="console-box" id="console">
         <div class="log-entry">> Initializing New Year Protocol...</div>
         <div class="log-entry">> Loading friends... Found (Best People)</div>
-        <div class="log-entry">> Deleting 2025_trauma.exe...</div>
+        <div class="log-entry log-error">> Error: 2025 Trauma not deleting. Retrying...</div>
     </div>
 
     <button id="action-btn" onclick="fixBug()">FIX BUG 🐛</button>
 
     <div id="result-card">
-        <h2>✨ 2026 INSTALLED! ✨</h2>
+        <h2 style="color: #00ff41; margin-top: 0;">✨ SYSTEM HACKED! ✨</h2>
+        <div style="font-size: 3rem;">🎉</div>
         <div id="prophecy-text">Loading your fortune...</div>
-        <p style="font-size: 0.8rem; opacity: 0.8;">(Tap screen to close)</p>
+        <p style="font-size: 0.8rem; opacity: 0.8;">(Tap to get another prediction)</p>
     </div>
 
     <canvas id="confetti"></canvas>
@@ -157,30 +176,47 @@
         const resultCard = document.getElementById('result-card');
         const prophecyText = document.getElementById('prophecy-text');
         
-        // CSE + Indian Meme Logs
+        // --- 1. THE JOKES (System Logs) ---
+        // These appear when the user clicks the "FIX BUG" button
         const logs = [
-            { text: "> Error: 'Mithai' not found in directory.", type: "log-error" },
-            { text: "> Warning: 'Rishta' requests blocking port 8080.", type: "log-warning" },
-            { text: "> Optimizing Bank Balance... FAILED (Insufficient Funds).", type: "log-error" },
-            { text: "> Checking Cricket Stats... THALA REASON DETECTED (7).", type: "log-success" },
-            { text: "> Removing 'Toxic Ex'... Access Denied.", type: "log-error" },
-            { text: "> Installing 'Gym Motivation'... Estimated time: 3 days.", type: "log-warning" },
-            { text: "> Compiling 'Success'... 99% stuck.", type: "log-warning" },
+            // CSE/Tech
+            { text: "> Deleting 'System32' to fix life issues... Error.", type: "log-error" },
+            { text: "> Copying 'Topper's Assignment'... Ctrl+C failed.", type: "log-warning" },
+            { text: "> GitHub Streak: 0 contributions in 365 days.", type: "log-error" },
+            { text: "> Detecting ChatGPT in your assignment... 99% Match.", type: "log-error" },
+            
+            // Bengaluru Specific
+            { text: "> Contacting Auto Driver... Rejected (Won't go to Indiranagar).", type: "log-warning" },
+            { text: "> Checking Silk Board Traffic... Estimated Delay: 2 Years.", type: "log-warning" },
+            
+            // Indian Family/Life
+            { text: "> Mom is typing... 'Phone utha nalayak'.", type: "log-error" },
+            { text: "> Searching for 'Acche Din'... 404 Not Found.", type: "log-warning" },
+            { text: "> UPI Transaction Pending... Server died.", type: "log-error" },
+            
+            // Pop Culture
+            { text: "> Calculating RCB winning probability... Calculator broken.", type: "log-error" },
+            { text: "> Thala for a reason check... 2+0+2+6 = 10. (Panic!)", type: "log-error" },
             { text: "> Linking Aadhaar to New Year resolution...", type: "log-entry" }
         ];
 
-        // Funny Predictions for the final reveal
+        // --- 2. THE PREDICTIONS (Final Reveal) ---
+        // These appear on the card after the "deployment" finishes
         const predictions = [
-            "Prediction: You will finally understand Pointers in C++.",
-            "Prediction: Placement Package = 7 Crore (Thala for a reason).",
-            "Prediction: Your code will run on the first try (Just kidding).",
-            "Prediction: Goa plan finally successful.",
-            "Prediction: Mom will agree to your love marriage (Conditions apply).",
-            "Prediction: You will become a LinkedIn Influencer.",
-            "Prediction: Vada Pav prices will remain stable."
+            "Prediction: You will mark 'Gym' as 'wont-fix' in Jira by Jan 15th.",
+            "Prediction: Your code will compile, but your logic will fail.",
+            "Prediction: Goa Plan Status: 'Discussion Phase' (Infinite Loop).",
+            "Prediction: Placement Package > Sharma ji ka beta.",
+            "Prediction: Mess food will actually taste good one day.",
+            "Prediction: You will find money in an old jeans pocket (Wealth += 500).",
+            "Prediction: Ee Sala Cup Namde! (Maybe).",
+            "Prediction: Moye Moye moments will reduce by 10%.",
+            "Prediction: Relationship Status: 404 Not Found.",
+            "Prediction: You will say 'Bhai bas 5 min me pahunch raha hu' while in bed."
         ];
 
         let clickCount = 0;
+        let maxClicks = 6; // Number of clicks required to finish
 
         function addLog(text, type = "log-entry") {
             const div = document.createElement('div');
@@ -197,14 +233,14 @@
             const randomLog = logs[Math.floor(Math.random() * logs.length)];
             addLog(randomLog.text, randomLog.type);
 
-            // Glitch effect on button
-            const randomX = (Math.random() - 0.5) * 20;
-            const randomY = (Math.random() - 0.5) * 20;
+            // Glitch effect on button (Move it around)
+            const randomX = (Math.random() - 0.5) * 40;
+            const randomY = (Math.random() - 0.5) * 40;
             btn.style.transform = `translate(${randomX}px, ${randomY}px)`;
 
-            // Logic: User must click 5 times to "Fix" the year
-            if (clickCount < 5) {
-                const phrases = ["DEBUG HARDER!", "RE-COMPILE!", "SUDO FIX IT!", "HIT IT!"];
+            // Logic: User must click multiple times
+            if (clickCount < maxClicks) {
+                const phrases = ["DEBUG HARDER!", "RE-COMPILE!", "SUDO FIX IT!", "HIT IT!", "ALMOST THERE!", "DEPLOYING..."];
                 btn.innerText = phrases[clickCount % phrases.length];
             } else {
                 launchNewYear();
@@ -213,34 +249,44 @@
 
         function launchNewYear() {
             btn.style.display = 'none';
-            addLog("> SUCCESS: 2026 DEPLOYED!", "log-success");
+            addLog("> SUCCESS: 2026 DEPLOYED SUCCESSFULLY!", "log-success");
             
             // Trigger Confetti
             startConfetti();
             
             // Show Card
             setTimeout(() => {
-                const randomProphecy = predictions[Math.floor(Math.random() * predictions.length)];
-                prophecyText.innerText = randomProphecy;
+                showPrediction();
                 resultCard.style.display = 'block';
-            }, 1000);
+            }, 800);
         }
 
-        // Close card on click
+        function showPrediction() {
+            const randomProphecy = predictions[Math.floor(Math.random() * predictions.length)];
+            prophecyText.innerText = randomProphecy;
+            
+            // Re-trigger confetti for fun
+            if(confetti.length < 50) startConfetti();
+        }
+
+        // Close card on click to get another prediction
         resultCard.addEventListener('click', () => {
-            resultCard.style.display = 'none';
-            btn.style.display = 'inline-block';
-            btn.innerText = "GET ANOTHER PREDICTION";
-            clickCount = 4; // Reset so one click gives new prediction
+            // resultCard.style.display = 'none'; // Optional: Close it
+            // Or just change the text
+            showPrediction();
         });
 
         /* --- SIMPLE CONFETTI SCRIPT --- */
         const canvas = document.getElementById("confetti");
         const ctx = canvas.getContext("2d");
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
         let confetti = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
         function startConfetti() {
             for (let i = 0; i < 100; i++) {
@@ -248,8 +294,9 @@
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height - canvas.height,
                     color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-                    size: Math.random() * 10 + 5,
-                    speed: Math.random() * 5 + 2
+                    size: Math.random() * 8 + 4,
+                    speed: Math.random() * 5 + 3,
+                    oscillation: Math.random() * 20
                 });
             }
             animateConfetti();
@@ -257,22 +304,32 @@
 
         function animateConfetti() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let active = false;
+            
             confetti.forEach((p, i) => {
+                p.y += p.speed;
+                p.x += Math.sin(p.y / 20) * 1; // Wiggle effect
+                
                 ctx.fillStyle = p.color;
                 ctx.fillRect(p.x, p.y, p.size, p.size);
-                p.y += p.speed;
-                if (p.y > canvas.height) confetti[i].y = -10;
+
+                if (p.y < canvas.height) active = true;
+                else {
+                    // Reset particles for loop or remove
+                    if (clickCount >= maxClicks) {
+                        p.y = -10;
+                        p.x = Math.random() * canvas.width;
+                    }
+                }
             });
-            requestAnimationFrame(animateConfetti);
+
+            if (active) requestAnimationFrame(animateConfetti);
         }
-        
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
 
         // Initial logs
-        setTimeout(() => addLog("> System: Chai break over. Resume work.", "log-entry"), 1000);
+        setTimeout(() => addLog("> System: Chai break over. Resume work.", "log-entry"), 800);
+        setTimeout(() => addLog("> Warning: Sleep.exe not found.", "log-warning"), 1500);
+
     </script>
 </body>
 </html>
